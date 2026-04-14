@@ -5,28 +5,16 @@ on:
     - cron: '0 23 * * *'
   workflow_dispatch:
 
-# 設定環境變數以強制執行 Node.js 24
-env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
-
 jobs:
   run:
     runs-on: ubuntu-latest
     steps:
-      # 更新至支援 Node 24 的版本
-      - name: Checkout repository
-        uses: actions/checkout@v4.2.2 
-
-      - name: Set up Python
-        uses: actions/setup-python@v5.4.0
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-
-      - name: Install dependencies
-        run: pip install -r requirements.txt
-
-      - name: Run script
-        run: python main.py
+      - run: pip install -r requirements.txt
+      - run: python main.py
         env:
           LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
           LLM_BASE_URL: ${{ secrets.LLM_BASE_URL }}
